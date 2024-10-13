@@ -42,6 +42,9 @@ def convert_to_lowercase(text: str) -> str:
 def remove_extra_spaces(text: str) -> str:    
     return re.sub(r'\s+', ' ', text.strip())
 
+def removing_digits(text: str) -> str:
+    return re.sub(r'\d', '', text.strip())
+
 def lemmatization(text: str) -> str:
     lemmatizer = WordNetLemmatizer()
     text = text.split()
@@ -68,3 +71,21 @@ def normalization_text(type_normalization: str, text: str) -> str:
         return stemming(text)
     else:
         raise ValueError(f"Unsupported normalization type: {type_normalization}. Avaliable options: ['stemming', 'lemmatization', 'combo'(lemmatization + stemming)]")
+
+def tokenize_word(text: str) -> str:
+    return text.split()
+
+def one_hot_encoding():
+    pass
+
+def word2vec():
+    pass
+
+def fasttext():
+    pass
+
+def tf_idf():
+    pass
+
+def count_vectorizer():
+    pass
