@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import random
 import re
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from gensim.models import Word2Vec, FastText
 
 import nltk
 from nltk.corpus import stopwords
@@ -75,17 +77,53 @@ def normalization_text(type_normalization: str, text: str) -> str:
 def tokenize_word(text: str) -> str:
     return text.split()
 
-def one_hot_encoding():
-    pass
+def one_hot_vectorize(list_words: np.array) -> np.array:
+    unique_words = list(set(list_words))
+    word_to_index = {word: i for i, word in enumerate(unique_words)}
+    number_words = len(unique_words)
+    
+    one_hot_matrix = np.zeros((len(list_words), number_words))
+    
+    for i, word in enumerate(list_words):
+        one_hot_matrix[i, word_to_index[word]] = 1
+        
+    return one_hot_matrix
 
-def word2vec():
-    pass
+def word2vec(corpus=list[list[str]], vector_size=100, window=5, min_count=1, workers=4) -> Word2Vec:
+    return Word2Vec(sentences=corpus,
+                    vector_size=vector_size,
+                    window=window,
+                    min_count=min_count,
+                    workers=workers
+            )
 
-def fasttext():
-    pass
+def fasttext(corpus=list[list[str]], vector_size=100, window=5, min_count=1, workers=4) -> FastText:
+    return FastText(sentences=corpus,
+                    vector_size=vector_size,
+                    window=window,
+                    min_count=min_count,
+                    workers=workers
+            )
 
-def tf_idf():
-    pass
+def tf_idf(corpus: np.array) -> tuple[np.ndarray, TfidfVectorizer]:
+    vectorizer = TfidfVectorizer(stop_words=stop_words, max_features=19000)
+    vector = vectorizer.fit_transform(corpus).toarray()
+    return vector
 
-def count_vectorizer():
-    pass
+def count_vectorizer(corpus: np.array) -> tuple[np.ndarray, CountVectorizer]:
+    vectorizer = CountVectorizer()
+    vector = vectorizer.fit_transform(corpus).toarray()
+    return vector
+
+def vectorization(type_vec: str, data: pd.Series):
+    if type_vec == 'one_hot_vectorize':
+        list_words = np.hstack([sentence.split() for sentence in data])
+        return one_hot_vectorize(list_words)
+    elif type_vec == 'word2vec':
+        pass
+    elif type_vec == 'fasttext':
+        pass
+    elif type_vec == 'tf_idf':
+        pass
+    else:
+        return count_vectorizer()
