@@ -14,6 +14,7 @@ def distribution_chart(data: pd.Series, column_name: str) -> plt.Figure:
         color = bar_colors
         )
 
+
     ax.set_ylabel(f'Number of {column_name}')
     ax.set_title(f'Distribution of {column_name}')
     return fig
