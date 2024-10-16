@@ -34,7 +34,7 @@ def sentiment_distribution_chart(data: pd.DataFrame, entity_col: str, sentiment_
     ax.set_xlabel('Count')
     ax.set_ylabel('Entity')
     ax.legend(title='Sentiment')
-    
+
     plt.tight_layout()
 
     return fig
@@ -47,16 +47,16 @@ def generate_sentiment_wordclouds(data: pd.DataFrame,
                                   width: int = 400,
                                   height: int = 200
 ) -> plt.Figure:
-   
+
     fig, axs = plt.subplots(2, 2, figsize=(15, 10))
 
     for sentiment, ax in zip(sentiments, axs.ravel()):
         sentiment_text = " ".join(tweet for tweet in data[data[sentiment_col] == sentiment][text_col])
         wordcloud = WordCloud(background_color=background_color, width=width, height=height).generate(sentiment_text)
-        
+
         ax.imshow(wordcloud, interpolation='bilinear')
         ax.axis('off')
         ax.set_title(f'Word Cloud for {sentiment} Sentiment')
-    
+
     plt.tight_layout()
     return fig
