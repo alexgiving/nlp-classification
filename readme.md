@@ -4,7 +4,7 @@ Deadline: `October 8 2024`
 
 ## Install dependencies
 Python 3.11
->Note Python <= 3.11 is required>
+>Note Python <= 3.11 is required
 
 ```bash
 pip install -r requirements.txt
