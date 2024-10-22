@@ -13,4 +13,5 @@ def estimate_quality(y_test: pd.Series, y_pred: pd.Series) -> Dict[str, float]:
 
     result['f1'] = f1_score(y_test, y_pred, average = 'micro')
     result['per_class_f1'] = f1_score(y_test, y_pred, average = None)
+    return result
 

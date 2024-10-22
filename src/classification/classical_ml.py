@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-
+from sklearn.model_selection import GridSearchCV
 
 class ClassicClassificationType(Enum):
     SVC = 'svc',
@@ -60,4 +60,14 @@ class ClassicClassification:
 
     def predict(self, x_test: pd.Series) -> pd.Series:
         return self._classification.predict(x_test)
+    
+    def grid_search(self, x: pd.Series, y: pd.Series, param_grid: dict, cv: int = 5) -> None:
+        if not self._classification:
+            self._init_classification()
+
+        grid_search = GridSearchCV(self._classification, param_grid, cv=cv)
+        grid_search.fit(x, y)
+        
+        self._classification = grid_search.best_estimator_
+        print("Best parameters found: ", grid_search.best_params_)
 
