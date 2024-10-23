@@ -1,16 +1,15 @@
-from pathlib import Path
-import numpy as np
-import pandas as pd
 import random
 import re
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from gensim.models import Word2Vec, FastText
+from pathlib import Path
 
 import nltk
+import numpy as np
+import pandas as pd
+from gensim.models import FastText, Word2Vec
 from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
 from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer, PorterStemmer
-
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 nltk.download('punkt_tab')
 nltk.download('stopwords')

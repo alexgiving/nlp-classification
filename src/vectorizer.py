@@ -3,7 +3,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
-from gensim.models import Word2Vec, FastText
+from gensim.models import FastText, Word2Vec
 from gensim.models.keyedvectors import KeyedVectors
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 

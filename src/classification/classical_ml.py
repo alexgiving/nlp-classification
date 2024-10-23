@@ -3,10 +3,11 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import GridSearchCV
+
 
 class ClassicClassificationType(Enum):
     SVC = 'svc',
