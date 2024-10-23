@@ -84,6 +84,6 @@ class Vectorizer:
     def transform(self, x: pd.Series) -> np.typing.NDArray[np.float32]:
         if self._vectorizer_type in (VectorizerType.W2V, VectorizerType.FAST_TEXT):
             vector_size = self._vectorizer_configuration_map[self._vectorizer_type]['vector_size']
-            return [self._get_vectors_for_tokens(sentence, self._vectorizer.wv, vector_size) for sentence in self._tokenize(x)]
+            return [self._get_average_vectors_word2vec(self._get_vectors_for_tokens(sentence, self._vectorizer.wv, vector_size)) for sentence in self._tokenize(x)]
 
         return self._vectorizer.transform(x).toarray()

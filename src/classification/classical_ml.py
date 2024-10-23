@@ -1,11 +1,12 @@
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-
+from sklearn.model_selection import GridSearchCV
 
 class ClassicClassificationType(Enum):
     SVC = 'svc',
@@ -25,6 +26,15 @@ class ClassicClassification:
             ClassicClassificationType.K_NEIGHBORS: KNeighborsClassifier,
         }
         self._classification = None
+        self._best_params = None
+
+    @property
+    def best_params(self) -> Dict[str, Any]:
+        return self._best_params
+
+    @property
+    def classification_type(self) -> str:
+        return self._classification_type
 
     def _init_classification(self, *args, **kwargs) -> None:
         self._classification_configuration_map = {
@@ -48,16 +58,49 @@ class ClassicClassification:
             },
         }
 
+        self._grid_search_classification_configuration_map = {
+            ClassicClassificationType.SVC: {
+                'gamma': [2, 4],
+                'C': [1, 0.5],
+            },
+            ClassicClassificationType.DECISION_TREE: {
+                'max_depth': [5, 10],
+                'criterion': ['entropy', 'gini'],
+            },
+            ClassicClassificationType.RANDOM_FOREST: {
+                'n_estimators': [50, 100],
+                'criterion': ['entropy', 'gini'],
+                'max_depth': [5, 10]
+            },
+            ClassicClassificationType.K_NEIGHBORS: {
+                'n_neighbors': [5, 10],
+                'weights': ['uniform', 'distance'],
+                'algorithm': ['ball_tree', 'kd_tree', 'auto']
+            },
+        }
+
         classification_class = self._classification_map[self._classification_type]
         classification_parameters = self._classification_configuration_map[self._classification_type]
 
         self._classification = classification_class(**classification_parameters)
 
     def fit(self, x: pd.Series, y: pd.Series) -> None:
-            if not self._classification:
-                self._init_classification()
-            self._classification.fit(x, y)
+        if not self._classification:
+            self._init_classification()
+        self._classification.fit(x, y)
 
     def predict(self, x_test: pd.Series) -> pd.Series:
         return self._classification.predict(x_test)
 
+    def grid_search(self, x: pd.Series, y: pd.Series, *, param_grid: Optional[Dict[str, List[Any]]] = None, cv: int = 5) -> None:
+        if not self._classification:
+            self._init_classification()
+
+        if not param_grid:
+            param_grid = self._grid_search_classification_configuration_map[self._classification_type]
+
+        grid_search = GridSearchCV(self._classification, param_grid, cv=cv)
+        grid_search.fit(x, y)
+
+        self._classification = grid_search.best_estimator_
+        self._best_params = grid_search.best_params_
