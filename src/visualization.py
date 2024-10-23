@@ -3,6 +3,7 @@ import pandas as pd
 import seaborn as sns
 from wordcloud import WordCloud
 
+
 def distribution_chart(data: pd.Series, column_name: str) -> plt.Figure:
     fig, ax = plt.subplots()
 

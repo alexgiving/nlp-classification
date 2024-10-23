@@ -1,9 +1,10 @@
+from typing import List, Tuple
+
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-import numpy as np
-from typing import Tuple, List
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
