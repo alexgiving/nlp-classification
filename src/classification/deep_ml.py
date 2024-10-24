@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Dict
+from typing import Dict, Tuple
 
+import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
@@ -21,11 +22,11 @@ def prepare_dataset(x: pd.Series, y: pd.Series, tokenizer: AutoTokenizer) -> Dat
     return dataset
 
 
-def compute_metrics(pred) -> Dict[str, float]:
+def compute_metrics(pred: Tuple[np.typing.NDArray, np.typing.NDArray], num_classes: int = 2) -> Dict[str, float]:
     logits, labels = pred
     predictions = torch.argmax(torch.tensor(logits), dim=-1)
-    acc = accuracy(predictions, torch.tensor(labels), 'multiclass', num_classes=4)
-    f1 = f1_score(predictions, torch.tensor(labels), 'multiclass', num_classes=4)
+    acc = accuracy(predictions, torch.tensor(labels), 'multiclass', num_classes=num_classes)
+    f1 = f1_score(predictions, torch.tensor(labels), 'multiclass', num_classes=num_classes)
     return {'accuracy': acc.item(), 'f1': f1}
 
 
