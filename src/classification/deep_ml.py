@@ -11,15 +11,23 @@ from transformers import AutoTokenizer
 from transformers.modeling_outputs import SequenceClassifierOutput
 
 
-def prepare_dataset(x: pd.Series, y: pd.Series, tokenizer: AutoTokenizer) -> Dataset:
-    tokenized_inputs = tokenizer(list(x), padding='max_length', truncation=True, return_tensors='pt')
+def prepare_dataset(x: pd.Series, y: pd.Series, tokenizer: AutoTokenizer, max_length: int = 16) -> Dataset:
+    tokenized_inputs = tokenizer(
+        list(x), 
+        padding='max_length', 
+        truncation=True, 
+        max_length=max_length, 
+        return_tensors='pt'
+    )
     dataset = Dataset.from_dict(
         {
             'input_ids': tokenized_inputs['input_ids'],
-            'label': torch.tensor(y, dtype=torch.long)
+            'attention_mask': tokenized_inputs['attention_mask'],
+            'label': torch.tensor(y.to_numpy(), dtype=torch.long)
         }
     )
     return dataset
+
 
 
 def compute_metrics(pred: Tuple[np.typing.NDArray, np.typing.NDArray], num_classes: int = 2) -> Dict[str, float]:
