@@ -1,6 +1,6 @@
 # NLP Classification
 
-Deadline: `October 8 2024`
+Deadline: `October 25 2024`
 
 ## Install dependencies
 Python 3.11
